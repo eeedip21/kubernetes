@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: web-nginx
+  name: web-nginx
+#  namespace: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web-nginx
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: web-nginx
+    spec:
+      containers:
+      - image: nginx:latest
+        name: nginx
+        ports:
+          - containerPort: 80
+          - containerPort: 8080
+        volumeMounts:
+          - name: config
+            mountPath: /etc/nginx/conf.d/
+           # subPath: vhost.conf
+            readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            # Provide the name of the ConfigMap you want to mount.
+            name: nginx-conf
+            # An array of keys from the ConfigMap to create as files
+            items:
+            - key: "virtualhost.conf"
+              path: "virtualhost.conf"

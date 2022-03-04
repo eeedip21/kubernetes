@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-conf
+data:
+  virtualhost.conf: |
+        server {
+        listen 8080;
+        root /usr/share/nginx/html;
+        index index.html index.htm index.nginx-debian.html;
+        server_name example.com www.example.com;
+
+        location / {
+                try_files $uri $uri/ =404;
+        }
+        }
